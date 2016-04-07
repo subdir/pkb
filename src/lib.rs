@@ -146,7 +146,7 @@ impl Kickers5 {
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
-enum Rank {
+pub enum Rank {
     Nothing {
         values: Kickers5,
     },
