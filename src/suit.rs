@@ -1,15 +1,18 @@
 use std::fmt;
 
+xenum! {
 #[derive(Debug)]
 #[derive(Clone, Copy)]
+#[derive(Eq, PartialEq)]
 pub enum Suit {
     Spades,
     Hearts,
     Diamonds,
-    Clubs,
+    Clubs
+}
 }
 
-static all_suits: [Suit; 4] = [
+static ALL_SUITS: [Suit; 4] = [
     Suit::Spades,
     Suit::Hearts,
     Suit::Diamonds,
@@ -18,15 +21,7 @@ static all_suits: [Suit; 4] = [
 
 impl Suit {
     pub fn all() -> &'static[Suit] {
-        &all_suits
-    }
-
-    pub fn id(&self) -> u8 {
-        *self as u8
-    }
-
-    pub fn from_id(id: u8) -> Self {
-        all_suits[id as usize]
+        &ALL_SUITS
     }
 
     pub fn to_char(&self) -> char {
@@ -55,3 +50,8 @@ impl fmt::Display for Suit {
     }
 }
 
+#[test]
+fn test() {
+    assert!(Suit::from_u16(0).unwrap() == Suit::Spades);
+    assert!(Suit::from_u8(1).unwrap() == Suit::Hearts);
+}

@@ -1,3 +1,6 @@
+#[macro_use]
+mod utils;
+
 mod suit;
 mod value;
 mod rank;
@@ -6,7 +9,6 @@ pub use suit::Suit;
 pub use value::Value;
 pub use rank::Rank;
 
-
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 pub struct Card {
@@ -14,12 +16,10 @@ pub struct Card {
     suit: Suit,
 }
 
-
 #[derive(Debug)]
 pub struct Cards {
     cards: Vec<Card>,
 }
-
 
 impl Cards {
     fn new_deck() -> Self {
@@ -31,12 +31,11 @@ impl Cards {
         }
         deck
     }
-    /*
+/*
     fn rank(&self) {
         let value_stats = ValueStats::from_cards(*self);
         let suit_stats = SuitStats::from_cards(*self);
 
-        if suit_stats
+        if value.stats
     }*/
 }
-
