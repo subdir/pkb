@@ -29,6 +29,10 @@ impl Card {
             suit: Suit::from_char(chars.next().unwrap()),
         }
     }
+
+    fn to_string(self) -> String {
+        format!("{}{}", self.value.to_char(), self.suit.to_char())
+    }
 }
 
 
@@ -56,12 +60,16 @@ impl Cards {
         deck
     }
 
-    fn from_strs(strs: &[&str]) -> Self {
-        let mut cards = Vec::with_capacity(strs.len());
-        for s in strs {
+    fn from_str(s: &str) -> Self {
+        let mut cards = Vec::new();
+        for s in s.split(":") {
             cards.push(Card::from_str(s));
         }
         Cards { cards: cards }
+    }
+
+    fn to_string(&self) -> String {
+        self.cards.iter().map(|card| card.to_string()).collect::<Vec<String>>().join(":")
     }
 
 /*
@@ -76,11 +84,7 @@ impl Cards {
 
 impl std::fmt::Display for Cards {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-        for card in self.cards.iter() {
-            try! { card.fmt(f) };
-            try! { write!(f, ":") };
-        }
-        Ok(())
+        write!(f, "{}", self.to_string())
     }
 }
 
@@ -88,7 +92,7 @@ impl std::fmt::Display for Cards {
 #[test]
 fn test() {
     assert_eq!(
-        "AS:TH:2D:3D:4D:",
-        format!("{}", Cards::from_strs(&["AS", "TH", "2D", "3D", "4D"]))
+        "AS:5H:2D:3D:4D",
+        format!("{}", Cards::from_str("AS:5H:2D:3D:4D"))
     )
 }
