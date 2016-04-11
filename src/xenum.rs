@@ -38,7 +38,7 @@ macro_rules! xenum {
                 if (id as usize) < Self::variants_num() {
                     unsafe { std::mem::transmute(id) }
                 } else {
-                    panic!(format!("Bad id for {}: {:?}", stringify!($name), id))
+                    panic!("Bad id for {}: {:?}", stringify!($name), id)
                 }
             }
         }
@@ -63,7 +63,7 @@ macro_rules! inverted_match_constructor {
         pub fn $inverted(from: $res) -> Self {
             match from {
                 $( $map => $variant, )*
-                _ => panic!(format!("No variant for {:?}", from))
+                _ => panic!("No variant for {:?}", from)
             }
         }
     }
