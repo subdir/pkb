@@ -28,8 +28,8 @@ macro_rules! xenum {
                 arity!($($variant),*)
             }
             pub fn variants() -> &'static [$name; arity!($($variant),*)] {
-                static variants: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
-                &variants
+                static VARIANTS: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
+                &VARIANTS
             }
             fn id(self) -> u8 {
                 unsafe { std::mem::transmute(self) }
