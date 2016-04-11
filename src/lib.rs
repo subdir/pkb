@@ -14,6 +14,7 @@ pub use rank::Rank;
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
+#[derive(Eq, PartialEq, Hash)]
 pub struct Card {
     value: Value,
     suit: Suit,
@@ -61,9 +62,17 @@ impl Cards {
     }
 
     fn from_str(s: &str) -> Self {
+        let mut seen = std::collections::HashSet::new();
         let mut cards = Vec::new();
+
         for s in s.split(":") {
-            cards.push(Card::from_str(s));
+            let card = Card::from_str(s);
+            if seen.contains(&card) {
+                panic!("Duplicate card {}", card)
+            } else {
+                seen.insert(card);
+                cards.push(card);
+            }
         }
         Cards { cards: cards }
     }
@@ -92,7 +101,29 @@ impl std::fmt::Display for Cards {
 #[test]
 fn test() {
     assert_eq!(
+        Cards::new_deck().to_string(),
+        concat!(
+            "2S:2H:2D:2C:3S:3H:3D:3C:4S:4H:4D:4C:5S:5H:5D:5C:",
+            "6S:6H:6D:6C:7S:7H:7D:7C:8S:8H:8D:8C:9S:9H:9D:9C:",
+            "TS:TH:TD:TC:JS:JH:JD:JC:QS:QH:QD:QC:KS:KH:KD:KC:",
+            "AS:AH:AD:AC"
+        )
+    );
+    assert_eq!(
         "AS:5H:2D:3D:4D",
         format!("{}", Cards::from_str("AS:5H:2D:3D:4D"))
     )
 }
+
+#[test]
+#[should_panic(expected = "Duplicate card AS")]
+fn test_duplicate() {
+    let cards = Cards::from_str("AS:2H:AS");
+}
+
+#[test]
+#[should_panic(expected = "No variant for 'X'")]
+fn test_wrong_card() {
+    let cards = Cards::from_str("AS:2H:XS");
+}
+

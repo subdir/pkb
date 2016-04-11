@@ -1,7 +1,8 @@
 xenum!{
 #[derive(Debug)]
 #[derive(Clone, Copy)]
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Eq, PartialEq, Hash)]
+#[derive(Ord, PartialOrd)]
 pub enum Value {
     Two,
     Three,

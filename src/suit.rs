@@ -1,7 +1,7 @@
 xenum! {
 #[derive(Debug)]
 #[derive(Clone, Copy)]
-#[derive(Eq, PartialEq)]
+#[derive(Eq, PartialEq, Hash)]
 pub enum Suit {
     Spades,
     Hearts,
