@@ -20,11 +20,24 @@ pub struct Card {
 }
 
 
+impl Card {
+    fn from_str(s: &str) -> Self {
+        assert_eq!(s.len(), 2);
+        let mut chars = s.chars();
+        Card {
+            value: Value::from_char(chars.next().unwrap()),
+            suit: Suit::from_char(chars.next().unwrap()),
+        }
+    }
+}
+
+
 impl std::fmt::Display for Card {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
         write!(f, "{}{}", self.value.to_char(), self.suit.to_char())
     }
 }
+
 
 #[derive(Debug)]
 pub struct Cards {
@@ -42,6 +55,15 @@ impl Cards {
         }
         deck
     }
+
+    fn from_strs(strs: &[&str]) -> Self {
+        let mut cards = Vec::with_capacity(strs.len());
+        for s in strs {
+            cards.push(Card::from_str(s));
+        }
+        Cards { cards: cards }
+    }
+
 /*
     fn rank(&self) {
         let value_stats = ValueStats::from_cards(*self);
@@ -49,4 +71,24 @@ impl Cards {
 
         if value.stats
     }*/
+}
+
+
+impl std::fmt::Display for Cards {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        for card in self.cards.iter() {
+            try! { card.fmt(f) };
+            try! { write!(f, ":") };
+        }
+        Ok(())
+    }
+}
+
+
+#[test]
+fn test() {
+    assert_eq!(
+        "AS:TH:2D:3D:4D:",
+        format!("{}", Cards::from_strs(&["AS", "TH", "2D", "3D", "4D"]))
+    )
 }
