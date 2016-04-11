@@ -22,7 +22,7 @@ pub struct Card {
 
 
 impl Card {
-    fn from_str(s: &str) -> Self {
+    pub fn from_str(s: &str) -> Self {
         assert_eq!(s.len(), 2);
         let mut chars = s.chars();
         Card {
@@ -31,7 +31,7 @@ impl Card {
         }
     }
 
-    fn to_string(self) -> String {
+    pub fn to_string(self) -> String {
         format!("{}{}", self.value.to_char(), self.suit.to_char())
     }
 }
@@ -51,7 +51,7 @@ pub struct Cards {
 
 
 impl Cards {
-    fn new_deck() -> Self {
+    pub fn new_deck() -> Self {
         let mut deck = Cards { cards: Vec::with_capacity(Value::variants_num() * Suit::variants_num()) };
         for value in Value::variants() {
             for suit in Suit::variants() {
@@ -61,7 +61,7 @@ impl Cards {
         deck
     }
 
-    fn from_str(s: &str) -> Self {
+    pub fn from_str(s: &str) -> Self {
         let mut seen = std::collections::HashSet::new();
         let mut cards = Vec::new();
 
@@ -77,7 +77,7 @@ impl Cards {
         Cards { cards: cards }
     }
 
-    fn to_string(&self) -> String {
+    pub fn to_string(&self) -> String {
         self.cards.iter().map(|card| card.to_string()).collect::<Vec<String>>().join(":")
     }
 
@@ -98,32 +98,36 @@ impl std::fmt::Display for Cards {
 }
 
 
-#[test]
-fn test() {
-    assert_eq!(
-        Cards::new_deck().to_string(),
-        concat!(
-            "2S:2H:2D:2C:3S:3H:3D:3C:4S:4H:4D:4C:5S:5H:5D:5C:",
-            "6S:6H:6D:6C:7S:7H:7D:7C:8S:8H:8D:8C:9S:9H:9D:9C:",
-            "TS:TH:TD:TC:JS:JH:JD:JC:QS:QH:QD:QC:KS:KH:KD:KC:",
-            "AS:AH:AD:AC"
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        assert_eq!(
+            Cards::new_deck().to_string(),
+            concat!(
+                "2S:2H:2D:2C:3S:3H:3D:3C:4S:4H:4D:4C:5S:5H:5D:5C:",
+                "6S:6H:6D:6C:7S:7H:7D:7C:8S:8H:8D:8C:9S:9H:9D:9C:",
+                "TS:TH:TD:TC:JS:JH:JD:JC:QS:QH:QD:QC:KS:KH:KD:KC:",
+                "AS:AH:AD:AC"
+            )
+        );
+        assert_eq!(
+            "AS:5H:2D:3D:4D",
+            format!("{}", Cards::from_str("AS:5H:2D:3D:4D"))
         )
-    );
-    assert_eq!(
-        "AS:5H:2D:3D:4D",
-        format!("{}", Cards::from_str("AS:5H:2D:3D:4D"))
-    )
-}
+    }
 
-#[test]
-#[should_panic(expected = "Duplicate card AS")]
-fn test_duplicate() {
-    let cards = Cards::from_str("AS:2H:AS");
-}
+    #[test]
+    #[should_panic(expected = "Duplicate card AS")]
+    fn test_duplicate() {
+        let cards = Cards::from_str("AS:2H:AS");
+    }
 
-#[test]
-#[should_panic(expected = "No variant for 'X'")]
-fn test_wrong_card() {
-    let cards = Cards::from_str("AS:2H:XS");
+    #[test]
+    #[should_panic(expected = "No variant for 'X'")]
+    fn test_wrong_card() {
+        let cards = Cards::from_str("AS:2H:XS");
+    }
 }
-
