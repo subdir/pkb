@@ -4,8 +4,7 @@ use std::vec::Vec;
 use std::collections::VecDeque;
 use std::result::Result::{Ok, Err};
 
-type Chips = u64;
-
+use chips::Chips;
 
 // Invariant: stake is always greater than zero
 #[derive(Debug)]
@@ -16,7 +15,7 @@ struct ActivePlayer<Player> {
 
 impl<Player> ActivePlayer<Player> {
     fn new(player: Player, stake: Chips) -> Self {
-        assert!(stake > 0);
+        assert!(stake > Chips::new(0));
         Self { player: player, stake: stake }
     }
 }
@@ -38,7 +37,7 @@ struct Bettor<Player> {
 
 impl<Player> Bettor<Player> {
     fn new(player: ActivePlayer<Player>) -> Self {
-        Self { player: player.player, stake: player.stake, bet: 0 }
+        Self { player: player.player, stake: player.stake, bet: Chips::new(0) }
     }
 
     fn player(&self) -> &Player { &self.player }
@@ -67,7 +66,7 @@ enum BetError<Player> {
 
 impl<Player> BetError<Player> {
     fn into_bettor(self) -> ActiveBettor<Player> {
-        use BetError::*;
+        use self::BetError::*;
 
         match self {
             NotEnoughChips{ bettor, bet } => bettor,
@@ -85,7 +84,7 @@ enum InvolvedBettor<Player> {
 
 impl<Player> InvolvedBettor<Player> {
     fn new(bettor: Bettor<Player>) -> Self {
-        use InvolvedBettor::*;
+        use self::InvolvedBettor::*;
 
         if bettor.is_all_in() {
             AllIn(AllInBettor { bettor })
@@ -95,7 +94,7 @@ impl<Player> InvolvedBettor<Player> {
     }
 
     fn new_forced(bettor: Bettor<Player>) -> Self {
-        use InvolvedBettor::*;
+        use self::InvolvedBettor::*;
 
         if bettor.is_all_in() {
             AllIn(AllInBettor { bettor })
@@ -105,7 +104,7 @@ impl<Player> InvolvedBettor<Player> {
     }
 
     fn bet(&self) -> Chips {
-        use InvolvedBettor::*;
+        use self::InvolvedBettor::*;
 
         match self {
             &Active(ref bettor) => bettor.bet(),
@@ -200,7 +199,7 @@ impl<Player> ActiveBettor<Player> {
     }
 
     fn make_bet(mut self, new_bet: Chips) -> Result<InvolvedBettor<Player>, BetError<Player>> {
-        use SimpleBetError::*;
+        use self::SimpleBetError::*;
 
         match self.bettor.make_bet(new_bet) {
             Ok(()) => Ok(InvolvedBettor::new(self.bettor)),
@@ -226,7 +225,7 @@ impl<Player> Bettors<Player> {
             betting_queue: VecDeque::new(),
             all_in: Vec::new(),
             folded: Vec::new(),
-            max_bet: 0,
+            max_bet: Chips::new(0),
         }
     }
 
@@ -259,7 +258,7 @@ impl<Player> Bettors<Player> {
     }
 
     fn add_involved(&mut self, bettor: InvolvedBettor<Player>) {
-        use InvolvedBettor::*;
+        use self::InvolvedBettor::*;
 
         self.max_bet = max(self.max_bet, bettor.bet());
         match bettor {
@@ -428,6 +427,8 @@ impl<Player> Showdown<Player> {
 
 #[cfg(test)]
 mod test {
+    use chips::Chips;
+
     use super::ActivePlayer;
     use super::ForcedBettor;
     use super::ForcedBetting;
@@ -436,20 +437,23 @@ mod test {
     #[test]
     fn test() {
         let players = vec!(
-            ForcedBettor::new(ActivePlayer::new(0, 1000)),
-            ForcedBettor::new(ActivePlayer::new(1, 1000)),
-            ForcedBettor::new(ActivePlayer::new(2, 1000)),
+            ForcedBettor::new(ActivePlayer::new(0, Chips::new(1000))),
+            ForcedBettor::new(ActivePlayer::new(1, Chips::new(1000))),
+            ForcedBettor::new(ActivePlayer::new(2, Chips::new(1000))),
         );
         let mut forced = ForcedBetting::new(players.into_iter());
 
-        forced.make_forced_bet(0, 100);
-        forced.make_forced_bet(1, 200);
-        forced.make_forced_bet(2, 0);
+        forced.make_forced_bet(0, Chips::new(100));
+        forced.make_forced_bet(1, Chips::new(200));
+        forced.make_forced_bet(2, Chips::new(0));
 
         let round = forced.finish();
 
         match round {
-            Betting(betting) => assert_eq!(betting.bettors.max_bet(), 200),
+            Betting(betting) => {
+                assert_eq!(betting.bettors.max_bet(), Chips::new(200));
+                betting.make_bet(0, Chips::new(199));
+            },
             _ => assert!(false),
         }
     }

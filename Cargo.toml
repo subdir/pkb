@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["subdir"]
 
 [dependencies]
+derive_more = "0.6.0"
