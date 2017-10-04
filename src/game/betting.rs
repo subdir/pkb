@@ -157,7 +157,12 @@ impl<Player> ForcedBettor<Player> {
 
 impl<Player: Eq> ForcedBettor<Player> {
     fn is(self, player: Player) -> Self {
-        assert!(player == *self.bettor.player());
+        assert!(
+            player == *self.bettor.player(),
+            "Player mismatch: {:?} != {:?}"//,
+//            player,
+//            self.bettor.player()
+        );
         self
     }
 }
@@ -269,12 +274,6 @@ impl<Player> Bettors<Player> {
 }
 
 
-enum ForcedBettingResult<Player> {
-    Betting(Betting<Player>),
-    Showdown(Showdown<Player>),
-}
-
-
 struct ForcedBetting<Player, ForcedBettorIter> {
     forced: ForcedBettorIter,
     bettors: Bettors<Player>,
@@ -291,19 +290,19 @@ where
         }
     }
 
-    fn finish(mut self) -> ForcedBettingResult<Player> {
+    fn finish(mut self) -> RoundState<Player> {
         assert!(self.forced.next().is_none());
         assert!(self.bettors.involved_count() >= 2);
 
         if self.bettors.active_count() == 0 {
-            return ForcedBettingResult::Showdown(Showdown{ bettors: self.bettors })
+            return RoundState::Showdown(Showdown{ bettors: self.bettors })
         }
 
         if self.bettors.active_count() == 1 && self.bettors.may_agree_by_checking() {
-            return ForcedBettingResult::Showdown(Showdown{ bettors: self.bettors })
+            return RoundState::Showdown(Showdown{ bettors: self.bettors })
         }
 
-        return ForcedBettingResult::Betting(Betting{ bettors: self.bettors })
+        return RoundState::Betting(Betting{ bettors: self.bettors })
     }
 }
 
@@ -312,11 +311,10 @@ where
     ForcedBettorIter: Iterator<Item=ForcedBettor<Player>>,
     Player: Eq + Debug,
 {
-    fn forced_bet(mut self, player: Player, bet: Chips) -> Self {
+    fn make_forced_bet(&mut self, player: Player, bet: Chips) {
         self.bettors.add_involved(
             self.forced.next().unwrap().is(player).make_forced_bet(bet)
         );
-        self
     }
 }
 
@@ -433,16 +431,27 @@ mod test {
     use super::ActivePlayer;
     use super::ForcedBettor;
     use super::ForcedBetting;
-    use std::slice;
+    use super::RoundState::Betting;
 
     #[test]
     fn test() {
-        let players = [
-            ForcedBettor::new(ActivePlayer::new(0u8, 1000)),
-            ForcedBettor::new(ActivePlayer::new(1u8, 1000)),
-            ForcedBettor::new(ActivePlayer::new(2u8, 1000)),
-        ];
-        let forced = ForcedBetting::new(players.into_iter());
+        let players = vec!(
+            ForcedBettor::new(ActivePlayer::new(0, 1000)),
+            ForcedBettor::new(ActivePlayer::new(1, 1000)),
+            ForcedBettor::new(ActivePlayer::new(2, 1000)),
+        );
+        let mut forced = ForcedBetting::new(players.into_iter());
+
+        forced.make_forced_bet(0, 100);
+        forced.make_forced_bet(1, 200);
+        forced.make_forced_bet(2, 0);
+
+        let round = forced.finish();
+
+        match round {
+            Betting(betting) => assert_eq!(betting.bettors.max_bet(), 200),
+            _ => assert!(false),
+        }
     }
 }
 
