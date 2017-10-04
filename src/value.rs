@@ -1,5 +1,4 @@
-use std::iter;
-use std::slice;
+use sequential::Sequential;
 
 
 with_variants_array!{
@@ -67,8 +66,13 @@ impl Value {
         }
     }
 
-    pub fn next(self) -> Option<Self> {
-        match self {
+    pub fn lowest() -> Self { Value::Two }
+}
+
+
+impl Sequential for Value {
+    fn consequent(&self) -> Option<Self> {
+        match *self {
             Value::Ace => None,
             _          => Some(Self::from_serial(self.to_serial() + 1))
         }

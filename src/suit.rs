@@ -1,8 +1,3 @@
-use std::iter::FromIterator;
-use std::slice;
-use std::iter;
-use std::vec;
-
 with_variants_array! {
 #[derive(Debug)]
 #[derive(Clone, Copy)]
