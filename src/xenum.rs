@@ -13,7 +13,7 @@ macro_rules! arity {
 }
 
 
-macro_rules! xenum {
+macro_rules! with_variants_array {
     (
         $( #[$enum_attr:meta] )*
         pub enum $name:ident { $( $variant:ident ),* }
@@ -21,26 +21,13 @@ macro_rules! xenum {
         use std;
 
         $( #[$enum_attr] )*
-        pub enum  $name { $( $variant, )* }
+        pub enum  $name {
+            $( $variant, )*
+        }
 
         impl $name {
-            pub const fn variants_num() -> usize {
-                arity!($($variant),*)
-            }
-            pub fn variants() -> &'static [$name; arity!($($variant),*)] {
-                static VARIANTS: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
-                &VARIANTS
-            }
-            fn id(self) -> u8 {
-                unsafe { std::mem::transmute(self) }
-            }
-            fn from_id(id: u8) -> Self {
-                if (id as usize) < Self::variants_num() {
-                    unsafe { std::mem::transmute(id) }
-                } else {
-                    panic!("Bad id for {}: {:?}", stringify!($name), id)
-                }
-            }
+            const VARIANTS_NUM: usize = arity!($($variant),*);
+            const VARIANTS: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
         }
     };
 }
@@ -68,6 +55,4 @@ macro_rules! inverted_match_constructor {
         }
     }
 }
-
-
 
