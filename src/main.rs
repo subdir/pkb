@@ -5,7 +5,7 @@ use pokerbot::Rank;
 
 fn main() {
     for rank in Rank::sequence() {
-        println!("{}", rank);
+        println!("{} {:?}", rank, rank.rank_type());
     }
 
 //    println!("{}", (&mut g).next().unwrap().next().unwrap());

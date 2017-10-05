@@ -8,6 +8,7 @@ mod trips;
 mod straight;
 mod flush;
 mod full_house;
+mod straight_flush;
 
 
 use std::fmt;
@@ -21,6 +22,7 @@ use self::trips::Trips;
 use self::straight::Straight;
 use self::flush::Flush;
 use self::full_house::FullHouse;
+use self::straight_flush::StraightFlush;
 
 
 #[derive(Debug)]
@@ -54,9 +56,9 @@ pub enum Rank {
     Straight(Straight),
     Flush(Flush),
     FullHouse(FullHouse),
-/*    Quads(Quads),
+//    Quads(Quads),
     StraightFlush(StraightFlush)
-*/}
+}
 
 
 impl Rank {
@@ -67,6 +69,7 @@ impl Rank {
     pub fn straight(straight: Straight) -> Self { Rank::Straight(straight) }
     pub fn flush(flush: Flush) -> Self { Rank::Flush(flush) }
     pub fn full_house(full_house: FullHouse) -> Self { Rank::FullHouse(full_house) }
+    pub fn straight_flush(straight_flush: StraightFlush) -> Self { Rank::StraightFlush(straight_flush) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
         Nothing::lowest().sequence().map(|r| Rank::nothing(r))
@@ -76,17 +79,19 @@ impl Rank {
         .chain(Straight::lowest().sequence().map(|r| Rank::straight(r)))
         .chain(Flush::lowest().sequence().map(|r| Rank::flush(r)))
         .chain(FullHouse::lowest().sequence().map(|r| Rank::full_house(r)))
+        .chain(StraightFlush::lowest().sequence().map(|r| Rank::straight_flush(r)))
     }
 
     pub fn rank_type(&self) -> RankType {
         match *self {
-            Rank::Nothing(rank)   => RankType::Nothing,
-            Rank::Pair(rank)      => RankType::Pair,
-            Rank::TwoPairs(rank)  => RankType::TwoPairs,
-            Rank::Trips(rank)     => RankType::Trips,
-            Rank::Straight(rank)  => RankType::Straight,
-            Rank::Flush(rank)     => RankType::Flush,
-            Rank::FullHouse(rank) => RankType::FullHouse,
+            Rank::Nothing(rank)       => RankType::Nothing,
+            Rank::Pair(rank)          => RankType::Pair,
+            Rank::TwoPairs(rank)      => RankType::TwoPairs,
+            Rank::Trips(rank)         => RankType::Trips,
+            Rank::Straight(rank)      => RankType::Straight,
+            Rank::Flush(rank)         => RankType::Flush,
+            Rank::FullHouse(rank)     => RankType::FullHouse,
+            Rank::StraightFlush(rank) => RankType::StraightFlush,
         }
     }
 }
@@ -95,35 +100,23 @@ impl Rank {
 impl fmt::Display for Rank {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Rank::Nothing(rank)   => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Pair(rank)      => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::TwoPairs(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Trips(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Straight(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Flush(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::FullHouse(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Nothing(rank)       => rank.fmt(f),
+            Rank::Pair(rank)          => rank.fmt(f),
+            Rank::TwoPairs(rank)      => rank.fmt(f),
+            Rank::Trips(rank)         => rank.fmt(f),
+            Rank::Straight(rank)      => rank.fmt(f),
+            Rank::Flush(rank)         => rank.fmt(f),
+            Rank::FullHouse(rank)     => rank.fmt(f),
+            Rank::StraightFlush(rank) => rank.fmt(f),
         }
     }
 }
 
 
 /*
-    pub fn new_full_house(three_card_value: Value, two_card_value: Value) -> Self {
-        assert!(three_card_value != two_card_value);
-        Rank::FullHouse { three_card_value: three_card_value, two_card_value: two_card_value }
-    }
     pub fn new_quads(value: Value, kicker: Value) -> Self {
         assert!(value != kicker);
         Rank::Quads { value: value, kicker: kicker }
-    }
-    pub fn new_straight_flush(highest_value: Value) -> Self {
-        assert!(highest_value >= Value::Five);
-        Rank::StraightFlush { highest_value: highest_value }
-    }
-
-    pub fn next_rank(&self) -> Rank {
-        match ref self {
-        }
     }
 }
 */
