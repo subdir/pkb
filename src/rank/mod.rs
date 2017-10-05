@@ -6,7 +6,7 @@ mod pair;
 mod two_pairs;
 mod trips;
 mod straight;
-
+mod flush;
 
 use std::fmt;
 
@@ -16,6 +16,7 @@ use self::pair::Pair;
 use self::two_pairs::TwoPairs;
 use self::trips::Trips;
 use self::straight::Straight;
+use self::flush::Flush;
 
 
 #[derive(Debug)]
@@ -47,8 +48,8 @@ pub enum Rank {
     TwoPairs(TwoPairs),
     Trips(Trips),
     Straight(Straight),
-/*    Flush(Flush),
-    FullHouse(FullHouse),
+    Flush(Flush),
+/*    FullHouse(FullHouse),
     Quads(Quads),
     StraightFlush(StraightFlush)
 */}
@@ -60,6 +61,7 @@ impl Rank {
     pub fn two_pairs(two_pairs: TwoPairs) -> Self { Rank::TwoPairs(two_pairs) }
     pub fn trips(trips: Trips) -> Self { Rank::Trips(trips) }
     pub fn straight(straight: Straight) -> Self { Rank::Straight(straight) }
+    pub fn flush(flush: Flush) -> Self { Rank::Flush(flush) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
         Nothing::lowest().sequence().map(|r| Rank::nothing(r))
@@ -67,6 +69,18 @@ impl Rank {
         .chain(TwoPairs::lowest().sequence().map(|r| Rank::two_pairs(r)))
         .chain(Trips::lowest().sequence().map(|r| Rank::trips(r)))
         .chain(Straight::lowest().sequence().map(|r| Rank::straight(r)))
+        .chain(Flush::lowest().sequence().map(|r| Rank::flush(r)))
+    }
+
+    pub fn rank_type(&self) -> RankType {
+        match *self {
+            Rank::Nothing(rank)  => RankType::Nothing,
+            Rank::Pair(rank)     => RankType::Pair,
+            Rank::TwoPairs(rank) => RankType::TwoPairs,
+            Rank::Trips(rank)    => RankType::Trips,
+            Rank::Straight(rank) => RankType::Straight,
+            Rank::Flush(rank)    => RankType::Flush,
+        }
     }
 }
 
@@ -74,24 +88,18 @@ impl Rank {
 impl fmt::Display for Rank {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Rank::Nothing(rank)  => write!(f, "{} {:?}", rank, RankType::Nothing),
-            Rank::Pair(rank)     => write!(f, "{} {:?}", rank, RankType::Pair),
-            Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, RankType::TwoPairs),
-            Rank::Trips(rank)    => write!(f, "{} {:?}", rank, RankType::Trips),
-            Rank::Straight(rank) => write!(f, "{} {:?}", rank, RankType::Straight),
+            Rank::Nothing(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Pair(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Trips(rank)    => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Straight(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Flush(rank)    => write!(f, "{} {:?}", rank, self.rank_type()),
         }
     }
 }
 
 
 /*
-    pub fn new_straight(highest_value: Value) -> Self {
-        assert!(highest_value >= Value::Five);
-        Rank::Straight { highest_value: highest_value }
-    }
-    pub fn new_flush(values: Kickers5) -> Self {
-        Rank::Flush { values: values }
-    }
     pub fn new_full_house(three_card_value: Value, two_card_value: Value) -> Self {
         assert!(three_card_value != two_card_value);
         Rank::FullHouse { three_card_value: three_card_value, two_card_value: two_card_value }
