@@ -53,11 +53,13 @@ impl Sequential for DistinctFive {
                 lower_three: next_lower_three
             })
         } else {
-            match self.higher_two.consequent() {
+            let lower_three = DistinctThree::lowest();
+
+            match self.higher_two.consequent().and_then(|d| d.skip_le(lower_three.higher())) {
                 None => None,
                 Some(next_higher_two) => Some(Self{
                     higher_two: next_higher_two,
-                    lower_three: DistinctThree::lowest()
+                    lower_three: lower_three
                 })
             }
         }
