@@ -42,6 +42,13 @@ impl DistinctTwo {
         .skip_while(|d| d.lower() <= value)
         .next()
     }
+
+    pub fn skip_value(&self, value: Value) -> Option<Self> {
+        self
+        .sequence()
+        .skip_while(|d| d.contains(value))
+        .next()
+    }
 }
 
 

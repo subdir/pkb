@@ -4,6 +4,7 @@ mod distinct_five;
 mod nothing;
 mod pair;
 mod two_pairs;
+mod trips;
 
 
 use std::fmt;
@@ -12,6 +13,7 @@ use sequential::Sequential;
 use self::nothing::Nothing;
 use self::pair::Pair;
 use self::two_pairs::TwoPairs;
+use self::trips::Trips;
 
 
 #[derive(Debug)]
@@ -41,8 +43,8 @@ pub enum Rank {
     Nothing(Nothing),
     Pair(Pair),
     TwoPairs(TwoPairs),
-/*    Trips(Trips),
-    Straight(Straight),
+    Trips(Trips),
+/*    Straight(Straight),
     Flush(Flush),
     FullHouse(FullHouse),
     Quads(Quads),
@@ -54,11 +56,13 @@ impl Rank {
     pub fn nothing(nothing: Nothing) -> Self { Rank::Nothing(nothing) }
     pub fn pair(pair: Pair) -> Self { Rank::Pair(pair) }
     pub fn two_pairs(two_pairs: TwoPairs) -> Self { Rank::TwoPairs(two_pairs) }
+    pub fn trips(trips: Trips) -> Self { Rank::Trips(trips) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
         Nothing::lowest().sequence().map(|r| Rank::nothing(r))
         .chain(Pair::lowest().sequence().map(|r| Rank::pair(r)))
         .chain(TwoPairs::lowest().sequence().map(|r| Rank::two_pairs(r)))
+        .chain(Trips::lowest().sequence().map(|r| Rank::trips(r)))
     }
 }
 
@@ -69,6 +73,7 @@ impl fmt::Display for Rank {
             Rank::Nothing(rank)  => write!(f, "{} {:?}", rank, RankType::Nothing),
             Rank::Pair(rank)     => write!(f, "{} {:?}", rank, RankType::Pair),
             Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, RankType::TwoPairs),
+            Rank::Trips(rank)    => write!(f, "{} {:?}", rank, RankType::Trips),
         }
     }
 }
