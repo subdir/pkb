@@ -33,10 +33,10 @@ impl Pair {
 
 impl Sequential for Pair {
     fn consequent(&self) -> Option<Self> {
-        match self.kickers.consequent().and_then(|c| c.skip_value(self.pair_value)) {
-            Some(kickers) => Some(Self::new(self.pair_value, kickers)),
+        match self.kickers.consequent().and_then(|k| k.skip_value(self.pair_value)) {
+            Some(next_kickers) => Some(Self::new(self.pair_value, next_kickers)),
             None => match self.pair_value.consequent() {
-                Some(pair_value) => Some(Self::lowest_for(pair_value)),
+                Some(next_pair_value) => Some(Self::lowest_for(next_pair_value)),
                 None => None
             }
         }

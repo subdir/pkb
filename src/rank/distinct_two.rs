@@ -26,6 +26,13 @@ impl DistinctTwo {
     pub fn lower(&self) -> Value { self.lower }
     pub fn contains(&self, value: Value) -> bool { value == self.higher || value == self.lower }
     pub fn is_straight(&self) -> bool { self.higher == self.lower.consequent().unwrap() }
+
+    pub fn skip_contained_values(&self, value: Value) -> Option<Value> {
+        value
+        .sequence()
+        .skip_while(|v| self.contains(*v))
+        .next()
+    }
 }
 
 

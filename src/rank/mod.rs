@@ -3,10 +3,12 @@ mod distinct_three;
 mod distinct_five;
 mod nothing;
 mod pair;
+mod two_pairs;
 
 
 use self::nothing::Nothing;
 use self::pair::Pair;
+use self::two_pairs::TwoPairs;
 
 
 pub enum RankType {
@@ -34,8 +36,8 @@ pub enum RankType {
 pub enum Rank {
     Nothing(Nothing),
     Pair(Pair),
-/*    TwoPairs(TwoPairs),
-    Trips(Trips),
+    TwoPairs(TwoPairs),
+/*    Trips(Trips),
     Straight(Straight),
     Flush(Flush),
     FullHouse(FullHouse),
