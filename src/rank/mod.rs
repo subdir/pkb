@@ -13,6 +13,7 @@ mod trips;
 mod straight;
 mod flush;
 mod full_house;
+mod quads;
 mod straight_flush;
 
 
@@ -27,6 +28,7 @@ use self::trips::Trips;
 use self::straight::Straight;
 use self::flush::Flush;
 use self::full_house::FullHouse;
+use self::quads::Quads;
 use self::straight_flush::StraightFlush;
 
 
@@ -61,7 +63,7 @@ pub enum Rank {
     Straight(Straight),
     Flush(Flush),
     FullHouse(FullHouse),
-//    Quads(Quads),
+    Quads(Quads),
     StraightFlush(StraightFlush)
 }
 
@@ -74,6 +76,7 @@ impl Rank {
     pub fn straight(straight: Straight) -> Self { Rank::Straight(straight) }
     pub fn flush(flush: Flush) -> Self { Rank::Flush(flush) }
     pub fn full_house(full_house: FullHouse) -> Self { Rank::FullHouse(full_house) }
+    pub fn quads(quads: Quads) -> Self { Rank::Quads(quads) }
     pub fn straight_flush(straight_flush: StraightFlush) -> Self { Rank::StraightFlush(straight_flush) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
@@ -84,6 +87,7 @@ impl Rank {
         .chain(Straight::lowest().sequence().map(|r| Rank::straight(r)))
         .chain(Flush::lowest().sequence().map(|r| Rank::flush(r)))
         .chain(FullHouse::lowest().sequence().map(|r| Rank::full_house(r)))
+        .chain(Quads::lowest().sequence().map(|r| Rank::quads(r)))
         .chain(StraightFlush::lowest().sequence().map(|r| Rank::straight_flush(r)))
     }
 
@@ -96,6 +100,7 @@ impl Rank {
             Rank::Straight(_)      => RankType::Straight,
             Rank::Flush(_)         => RankType::Flush,
             Rank::FullHouse(_)     => RankType::FullHouse,
+            Rank::Quads(_)         => RankType::Quads,
             Rank::StraightFlush(_) => RankType::StraightFlush,
         }
     }
@@ -112,16 +117,9 @@ impl fmt::Display for Rank {
             Rank::Straight(rank)      => rank.fmt(f),
             Rank::Flush(rank)         => rank.fmt(f),
             Rank::FullHouse(rank)     => rank.fmt(f),
+            Rank::Quads(rank)         => rank.fmt(f),
             Rank::StraightFlush(rank) => rank.fmt(f),
         }
     }
 }
 
-
-/*
-    pub fn new_quads(value: Value, kicker: Value) -> Self {
-        assert!(value != kicker);
-        Rank::Quads { value: value, kicker: kicker }
-    }
-}
-*/
