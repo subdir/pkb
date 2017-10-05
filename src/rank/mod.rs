@@ -5,6 +5,7 @@ mod nothing;
 mod pair;
 mod two_pairs;
 mod trips;
+mod straight;
 
 
 use std::fmt;
@@ -14,6 +15,7 @@ use self::nothing::Nothing;
 use self::pair::Pair;
 use self::two_pairs::TwoPairs;
 use self::trips::Trips;
+use self::straight::Straight;
 
 
 #[derive(Debug)]
@@ -44,8 +46,8 @@ pub enum Rank {
     Pair(Pair),
     TwoPairs(TwoPairs),
     Trips(Trips),
-/*    Straight(Straight),
-    Flush(Flush),
+    Straight(Straight),
+/*    Flush(Flush),
     FullHouse(FullHouse),
     Quads(Quads),
     StraightFlush(StraightFlush)
@@ -57,12 +59,14 @@ impl Rank {
     pub fn pair(pair: Pair) -> Self { Rank::Pair(pair) }
     pub fn two_pairs(two_pairs: TwoPairs) -> Self { Rank::TwoPairs(two_pairs) }
     pub fn trips(trips: Trips) -> Self { Rank::Trips(trips) }
+    pub fn straight(straight: Straight) -> Self { Rank::Straight(straight) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
         Nothing::lowest().sequence().map(|r| Rank::nothing(r))
         .chain(Pair::lowest().sequence().map(|r| Rank::pair(r)))
         .chain(TwoPairs::lowest().sequence().map(|r| Rank::two_pairs(r)))
         .chain(Trips::lowest().sequence().map(|r| Rank::trips(r)))
+        .chain(Straight::lowest().sequence().map(|r| Rank::straight(r)))
     }
 }
 
@@ -74,16 +78,13 @@ impl fmt::Display for Rank {
             Rank::Pair(rank)     => write!(f, "{} {:?}", rank, RankType::Pair),
             Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, RankType::TwoPairs),
             Rank::Trips(rank)    => write!(f, "{} {:?}", rank, RankType::Trips),
+            Rank::Straight(rank) => write!(f, "{} {:?}", rank, RankType::Straight),
         }
     }
 }
 
 
 /*
-    pub fn new_trips(trips_value: Value, kickers: Kickers2) -> Self {
-        assert!(!kickers.contains(trips_value));
-        Rank::Trips { trips_value: trips_value, kickers: kickers }
-    }
     pub fn new_straight(highest_value: Value) -> Self {
         assert!(highest_value >= Value::Five);
         Rank::Straight { highest_value: highest_value }
