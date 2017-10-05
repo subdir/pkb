@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sequential::Sequential;
 use value::Value;
 use rank::distinct_two::DistinctTwo;
@@ -40,6 +42,20 @@ impl Sequential for TwoPairs {
                 None => None
             }
         }
+    }
+}
+
+
+impl fmt::Display for TwoPairs {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,
+            "{}{}{}{}{}",
+            self.pairs.higher(),
+            self.pairs.higher(),
+            self.pairs.lower(),
+            self.pairs.lower(),
+            self.kicker
+        )
     }
 }
 

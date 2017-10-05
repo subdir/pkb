@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sequential::Sequential;
 use value::Value;
 use rank::distinct_three::DistinctThree;
@@ -13,16 +15,16 @@ pub struct Pair {
 
 
 impl Pair {
-    fn new(pair_value: Value, kickers: DistinctThree) -> Self {
+    pub fn new(pair_value: Value, kickers: DistinctThree) -> Self {
         assert!(!kickers.contains(pair_value));
         Self { pair_value: pair_value, kickers: kickers }
     }
 
-    fn lowest() -> Self {
+    pub fn lowest() -> Self {
         Self::lowest_for(Value::Two)
     }
 
-    fn lowest_for(pair_value: Value) -> Self {
+    pub fn lowest_for(pair_value: Value) -> Self {
         Self {
             pair_value: pair_value,
             kickers: DistinctThree::lowest().skip_value(pair_value).unwrap()
@@ -40,6 +42,13 @@ impl Sequential for Pair {
                 None => None
             }
         }
+    }
+}
+
+
+impl fmt::Display for Pair {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}{}{}", self.pair_value, self.pair_value, self.kickers)
     }
 }
 

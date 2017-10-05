@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sequential::Sequential;
 use value::Value;
 use value::Value::*;
@@ -59,6 +61,13 @@ impl Sequential for DistinctFive {
                 })
             }
         }
+    }
+}
+
+
+impl fmt::Display for DistinctFive {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}{}", self.higher_two, self.lower_three)
     }
 }
 

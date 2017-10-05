@@ -1,9 +1,16 @@
 extern crate pokerbot;
 
-use pokerbot::Suit;
-use pokerbot::Cards;
+use pokerbot::Rank;
+
 
 fn main() {
-    println!("XXXXXX {:?}", Cards::from_str("AS:5H:2D:3D:4D"));
-    println!("{:?}", Suit::variants_num());
+    for rank in Rank::sequence() {
+        println!("{}", rank);
+    }
+
+//    println!("{}", (&mut g).next().unwrap().next().unwrap());
+
+//    println!("XXXXXX {:?}", Cards::from_str("AS:5H:2D:3D:4D"));
+//    println!("{:?}", Suit::variants_num());
 }
+

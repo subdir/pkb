@@ -6,11 +6,15 @@ mod pair;
 mod two_pairs;
 
 
+use std::fmt;
+
+use sequential::Sequential;
 use self::nothing::Nothing;
 use self::pair::Pair;
 use self::two_pairs::TwoPairs;
 
 
+#[derive(Debug)]
 pub enum RankType {
     Nothing,
     Pair,
@@ -46,18 +50,31 @@ pub enum Rank {
 */}
 
 
-/*
 impl Rank {
-    pub fn new_pair(pair_value: Value, kickers: Kickers3) -> Self {
-        assert!(!kickers.contains(pair_value));
-        Rank::Pair { pair_value: pair_value, kickers: kickers }
+    pub fn nothing(nothing: Nothing) -> Self { Rank::Nothing(nothing) }
+    pub fn pair(pair: Pair) -> Self { Rank::Pair(pair) }
+    pub fn two_pairs(two_pairs: TwoPairs) -> Self { Rank::TwoPairs(two_pairs) }
+
+    pub fn sequence() -> impl Iterator<Item=Rank> {
+        Nothing::lowest().sequence().map(|r| Rank::nothing(r))
+        .chain(Pair::lowest().sequence().map(|r| Rank::pair(r)))
+        .chain(TwoPairs::lowest().sequence().map(|r| Rank::two_pairs(r)))
     }
-    pub fn new_two_pairs(higher_pair_value: Value, second_pair_value: Value, kicker: Value) -> Self {
-        assert!(higher_pair_value > second_pair_value);
-        assert!(higher_pair_value != kicker);
-        assert!(second_pair_value != kicker);
-        Rank::TwoPairs { higher_pair_value: higher_pair_value, second_pair_value: second_pair_value, kicker: kicker }
+}
+
+
+impl fmt::Display for Rank {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Rank::Nothing(rank)  => write!(f, "{} {:?}", rank, RankType::Nothing),
+            Rank::Pair(rank)     => write!(f, "{} {:?}", rank, RankType::Pair),
+            Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, RankType::TwoPairs),
+        }
     }
+}
+
+
+/*
     pub fn new_trips(trips_value: Value, kickers: Kickers2) -> Self {
         assert!(!kickers.contains(trips_value));
         Rank::Trips { trips_value: trips_value, kickers: kickers }

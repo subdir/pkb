@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sequential::Sequential;
 use rank::distinct_five::DistinctFive;
 
@@ -11,7 +13,7 @@ pub struct Nothing {
 
 
 impl Nothing {
-    fn lowest() -> Self {
+    pub fn lowest() -> Self {
         Self{ cards: DistinctFive::lowest().skip_straight().unwrap() }
     }
 }
@@ -23,6 +25,13 @@ impl Sequential for Nothing {
             None => None,
             Some(cards) => Some(Self { cards: cards })
         }
+    }
+}
+
+
+impl fmt::Display for Nothing {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.cards)
     }
 }
 

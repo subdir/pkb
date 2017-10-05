@@ -1,4 +1,5 @@
 #![feature(const_fn)]
+#![feature(conservative_impl_trait)]
 
 #[macro_use]
 extern crate derive_more;

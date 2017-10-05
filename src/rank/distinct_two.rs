@@ -1,3 +1,5 @@
+use std::fmt;
+
 use sequential::Sequential;
 use value::Value;
 use value::Value::*;
@@ -48,6 +50,13 @@ impl Sequential for DistinctTwo {
                 Some(next_higher) => Some(Self::new(next_higher, Value::lowest()))
             }
         }
+    }
+}
+
+
+impl fmt::Display for DistinctTwo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}{}", self.higher, self.lower)
     }
 }
 
