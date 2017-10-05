@@ -16,11 +16,6 @@ impl DistinctOrderedThree {
         Self::new(higher, DistinctOrderedTwo::new(middle, lower))
     }
 
-/*    pub fn higher(&self) -> Value { self.values.higher() }
-    pub fn middle(&self) -> Value { self.values.lower().higher() }
-    pub fn lower(&self) -> Value { self.values.lower().lower() }
-*/
-
     pub fn is_straight(&self) -> bool {
         self.lower().is_straight()
         && self.higher() == self.lower().higher().consequent().unwrap()

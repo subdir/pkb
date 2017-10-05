@@ -1,3 +1,11 @@
+/// ```
+/// use pokerbot::Value::*;
+/// use pokerbot::Rank;
+/// use pokerbot::rank::*;
+///
+/// assert!( Rank::straight(Straight::new(Five)) < Rank::quads(Quads::new(Three, Two)) );
+/// ```
+
 mod intersect;
 
 mod distinct;
@@ -21,15 +29,15 @@ use std::fmt;
 
 use sequential::{Sequential, LowBound};
 
-use self::nothing::Nothing;
-use self::pair::Pair;
-use self::two_pairs::TwoPairs;
-use self::trips::Trips;
-use self::straight::Straight;
-use self::flush::Flush;
-use self::full_house::FullHouse;
-use self::quads::Quads;
-use self::straight_flush::StraightFlush;
+pub use self::nothing::Nothing;
+pub use self::pair::Pair;
+pub use self::two_pairs::TwoPairs;
+pub use self::trips::Trips;
+pub use self::straight::Straight;
+pub use self::flush::Flush;
+pub use self::full_house::FullHouse;
+pub use self::quads::Quads;
+pub use self::straight_flush::StraightFlush;
 
 
 #[derive(Debug)]
@@ -46,12 +54,6 @@ pub enum RankType {
 }
 
 
-/// ```
-/// use pokerbot::Value::*;
-/// use pokerbot::Rank;
-///
-/// assert!( Rank::straight(Five) < Rank::quads(Three, Two) );
-/// ```
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]

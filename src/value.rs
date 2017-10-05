@@ -167,3 +167,21 @@ impl<T> Iterator for ValueSequences<T> {
     }
 }
 */
+
+#[cfg(test)]
+mod test {
+    use super::Value;
+    use sequential::{Sequential, LowBound};
+    use super::Value::*;
+
+    #[test]
+    fn test() {
+        assert_eq!(Value::VARIANTS_NUM, 13);
+        assert_eq!(Value::VARIANTS[0], Two);
+        assert_eq!(Value::lowest(), Two);
+        assert_eq!(Ace.prev(), Some(King));
+        assert_eq!(Two.prev(), None);
+        assert_eq!(Ace.consequent(), None);
+        assert_eq!(Two.consequent(), Some(Three));
+    }
+}
