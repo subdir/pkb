@@ -7,16 +7,20 @@ mod two_pairs;
 mod trips;
 mod straight;
 mod flush;
+mod full_house;
+
 
 use std::fmt;
 
 use sequential::Sequential;
+
 use self::nothing::Nothing;
 use self::pair::Pair;
 use self::two_pairs::TwoPairs;
 use self::trips::Trips;
 use self::straight::Straight;
 use self::flush::Flush;
+use self::full_house::FullHouse;
 
 
 #[derive(Debug)]
@@ -49,8 +53,8 @@ pub enum Rank {
     Trips(Trips),
     Straight(Straight),
     Flush(Flush),
-/*    FullHouse(FullHouse),
-    Quads(Quads),
+    FullHouse(FullHouse),
+/*    Quads(Quads),
     StraightFlush(StraightFlush)
 */}
 
@@ -62,6 +66,7 @@ impl Rank {
     pub fn trips(trips: Trips) -> Self { Rank::Trips(trips) }
     pub fn straight(straight: Straight) -> Self { Rank::Straight(straight) }
     pub fn flush(flush: Flush) -> Self { Rank::Flush(flush) }
+    pub fn full_house(full_house: FullHouse) -> Self { Rank::FullHouse(full_house) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
         Nothing::lowest().sequence().map(|r| Rank::nothing(r))
@@ -70,16 +75,18 @@ impl Rank {
         .chain(Trips::lowest().sequence().map(|r| Rank::trips(r)))
         .chain(Straight::lowest().sequence().map(|r| Rank::straight(r)))
         .chain(Flush::lowest().sequence().map(|r| Rank::flush(r)))
+        .chain(FullHouse::lowest().sequence().map(|r| Rank::full_house(r)))
     }
 
     pub fn rank_type(&self) -> RankType {
         match *self {
-            Rank::Nothing(rank)  => RankType::Nothing,
-            Rank::Pair(rank)     => RankType::Pair,
-            Rank::TwoPairs(rank) => RankType::TwoPairs,
-            Rank::Trips(rank)    => RankType::Trips,
-            Rank::Straight(rank) => RankType::Straight,
-            Rank::Flush(rank)    => RankType::Flush,
+            Rank::Nothing(rank)   => RankType::Nothing,
+            Rank::Pair(rank)      => RankType::Pair,
+            Rank::TwoPairs(rank)  => RankType::TwoPairs,
+            Rank::Trips(rank)     => RankType::Trips,
+            Rank::Straight(rank)  => RankType::Straight,
+            Rank::Flush(rank)     => RankType::Flush,
+            Rank::FullHouse(rank) => RankType::FullHouse,
         }
     }
 }
@@ -88,12 +95,13 @@ impl Rank {
 impl fmt::Display for Rank {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Rank::Nothing(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Pair(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::TwoPairs(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Trips(rank)    => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Straight(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
-            Rank::Flush(rank)    => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Nothing(rank)   => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Pair(rank)      => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::TwoPairs(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Trips(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Straight(rank)  => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::Flush(rank)     => write!(f, "{} {:?}", rank, self.rank_type()),
+            Rank::FullHouse(rank) => write!(f, "{} {:?}", rank, self.rank_type()),
         }
     }
 }
