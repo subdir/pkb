@@ -64,14 +64,15 @@ enum BetError<Player> {
     TooSmallBet { bettor: ActiveBettor<Player>, bet: Chips, min_bet: Chips },
 }
 
+
 impl<Player> BetError<Player> {
     fn into_bettor(self) -> ActiveBettor<Player> {
         use self::BetError::*;
 
         match self {
-            NotEnoughChips{ bettor, bet } => bettor,
-            LessThanPreviousBet{ bettor, bet } => bettor,
-            TooSmallBet { bettor, bet, min_bet } => bettor,
+            NotEnoughChips{ bettor, bet: _ } => bettor,
+            LessThanPreviousBet{ bettor, bet: _ } => bettor,
+            TooSmallBet { bettor, bet: _, min_bet: _ } => bettor,
         }
     }
 }
