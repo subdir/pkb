@@ -4,31 +4,31 @@ use sequential::{Sequential, LowBound};
 use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
-use rank::distinct_three::DistinctThree;
+use rank::distinct_ordered_three::DistinctOrderedThree;
 
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Pair {
-    pair: Distinct<Value, DistinctThree>
+    pair: Distinct<Value, DistinctOrderedThree>
 }
 
 
 impl Pair {
-    pub fn new(pair_value: Value, kickers: DistinctThree) -> Self {
+    pub fn new(pair_value: Value, kickers: DistinctOrderedThree) -> Self {
         Self { pair: Distinct::new(pair_value, kickers) }
     }
 
     pub fn lowest_for(pair_value: Value) -> Self {
         Self { pair: Distinct::new(
             pair_value,
-            DistinctThree::lowest().skip_intersecting(&pair_value).unwrap()
+            DistinctOrderedThree::lowest().skip_intersecting(&pair_value).unwrap()
         )}
     }
 
     pub fn pair_value(&self) -> Value { self.pair.primary() }
-    pub fn kickers(&self) -> DistinctThree { self.pair.secondary() }
+    pub fn kickers(&self) -> DistinctOrderedThree { self.pair.secondary() }
 }
 
 

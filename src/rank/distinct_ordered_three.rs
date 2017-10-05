@@ -5,15 +5,15 @@ use value::Value;
 use value::Value::*;
 use rank::intersect::{Intersect, IntersectOrd};
 use rank::distinct_ordered::DistinctOrdered;
-use rank::distinct_two::DistinctTwo;
+use rank::distinct_ordered_two::DistinctOrderedTwo;
 
 
-pub type DistinctThree = DistinctOrdered<Value, DistinctTwo>;
+pub type DistinctOrderedThree = DistinctOrdered<Value, DistinctOrderedTwo>;
 
 
-impl DistinctThree {
+impl DistinctOrderedThree {
     pub fn new_three(higher: Value, middle: Value, lower: Value) -> Self {
-        Self::new(higher, DistinctTwo::new(middle, lower))
+        Self::new(higher, DistinctOrderedTwo::new(middle, lower))
     }
 
 /*    pub fn higher(&self) -> Value { self.values.higher() }
@@ -28,24 +28,24 @@ impl DistinctThree {
 }
 
 
-impl LowBound for DistinctThree {
+impl LowBound for DistinctOrderedThree {
     fn lowest() -> Self { Self::new_three(Four, Three, Two) }
 }
 
 
-impl Intersect<DistinctThree> for Value {
-    fn intersects_with(&self, other: &DistinctThree) -> bool {
+impl Intersect<DistinctOrderedThree> for Value {
+    fn intersects_with(&self, other: &DistinctOrderedThree) -> bool {
         *self == other.higher() || self.intersects_with(&other.lower())
     }
 }
 
 
-impl IntersectOrd<DistinctThree> for DistinctTwo {
-    fn all_greater_than(&self, other: &DistinctThree) -> bool { self.lower() > other.higher() }
+impl IntersectOrd<DistinctOrderedThree> for DistinctOrderedTwo {
+    fn all_greater_than(&self, other: &DistinctOrderedThree) -> bool { self.lower() > other.higher() }
 }
 
 
-impl fmt::Display for DistinctThree {
+impl fmt::Display for DistinctOrderedThree {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}{}", self.higher(), self.lower())
     }

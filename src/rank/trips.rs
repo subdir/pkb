@@ -4,31 +4,31 @@ use sequential::{Sequential, LowBound};
 use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
-use rank::distinct_two::DistinctTwo;
+use rank::distinct_ordered_two::DistinctOrderedTwo;
 
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Trips {
-    trips: Distinct<Value, DistinctTwo>
+    trips: Distinct<Value, DistinctOrderedTwo>
 }
 
 
 impl Trips {
-    pub fn new(trips_value: Value, kickers: DistinctTwo) -> Self {
+    pub fn new(trips_value: Value, kickers: DistinctOrderedTwo) -> Self {
         Self { trips: Distinct::new(trips_value, kickers) }
     }
 
     pub fn lowest_for(trips_value: Value) -> Self {
         Self { trips: Distinct::new(
             trips_value,
-            DistinctTwo::lowest().skip_intersecting(&trips_value).unwrap()
+            DistinctOrderedTwo::lowest().skip_intersecting(&trips_value).unwrap()
         )}
     }
 
     pub fn trips_value(&self) -> Value { self.trips.primary() }
-    pub fn kickers(&self) -> DistinctTwo { self.trips.secondary() }
+    pub fn kickers(&self) -> DistinctOrderedTwo { self.trips.secondary() }
 }
 
 

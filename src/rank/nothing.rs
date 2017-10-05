@@ -1,20 +1,20 @@
 use std::fmt;
 
 use sequential::{Sequential, LowBound};
-use rank::distinct_five::DistinctFive;
+use rank::distinct_ordered_five::DistinctOrderedFive;
 
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Nothing {
-    values: DistinctFive,
+    values: DistinctOrderedFive,
 }
 
 
 impl LowBound for Nothing {
     fn lowest() -> Self {
-        Self{ values: DistinctFive::lowest().skip_straight().unwrap() }
+        Self{ values: DistinctOrderedFive::lowest().skip_straight().unwrap() }
     }
 }
 

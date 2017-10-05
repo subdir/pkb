@@ -4,23 +4,23 @@ use sequential::{Sequential, LowBound};
 use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
-use rank::distinct_two::DistinctTwo;
+use rank::distinct_ordered_two::DistinctOrderedTwo;
 
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct TwoPairs {
-    pairs: Distinct<DistinctTwo, Value>
+    pairs: Distinct<DistinctOrderedTwo, Value>
 }
 
 
 impl TwoPairs {
-    pub fn new(pairs: DistinctTwo, kicker: Value) -> Self {
+    pub fn new(pairs: DistinctOrderedTwo, kicker: Value) -> Self {
         Self { pairs: Distinct::new(pairs, kicker) }
     }
 
-    pub fn lowest_for(pairs: DistinctTwo) -> Self {
+    pub fn lowest_for(pairs: DistinctOrderedTwo) -> Self {
         Self { pairs: Distinct::new(
             pairs,
             Value::lowest().skip_intersecting(&pairs).unwrap()
@@ -34,7 +34,7 @@ impl TwoPairs {
 
 
 impl LowBound for TwoPairs {
-    fn lowest() -> Self { Self::lowest_for(DistinctTwo::lowest()) }
+    fn lowest() -> Self { Self::lowest_for(DistinctOrderedTwo::lowest()) }
 }
 
 

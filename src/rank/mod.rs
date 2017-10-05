@@ -2,9 +2,9 @@ mod intersect;
 
 mod distinct;
 mod distinct_ordered;
-mod distinct_two;
-mod distinct_three;
-mod distinct_five;
+mod distinct_ordered_two;
+mod distinct_ordered_three;
+mod distinct_ordered_five;
 
 mod nothing;
 mod pair;

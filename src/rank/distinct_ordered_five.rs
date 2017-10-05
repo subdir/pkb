@@ -3,18 +3,18 @@ use std::fmt;
 use sequential::Sequential;
 use value::Value::*;
 use rank::distinct_ordered::DistinctOrdered;
-use rank::distinct_two::DistinctTwo;
-use rank::distinct_three::DistinctThree;
+use rank::distinct_ordered_two::DistinctOrderedTwo;
+use rank::distinct_ordered_three::DistinctOrderedThree;
 
 
-pub type DistinctFive = DistinctOrdered<DistinctTwo, DistinctThree>;
+pub type DistinctOrderedFive = DistinctOrdered<DistinctOrderedTwo, DistinctOrderedThree>;
 
 
-impl DistinctFive {
+impl DistinctOrderedFive {
     pub fn lowest() -> Self {
         Self::new(
-            DistinctTwo::new(Six, Five),
-            DistinctThree::new_three(Four, Three, Two)
+            DistinctOrderedTwo::new(Six, Five),
+            DistinctOrderedThree::new_three(Four, Three, Two)
         )
     }
 
@@ -33,7 +33,7 @@ impl DistinctFive {
 }
 
 
-impl fmt::Display for DistinctFive {
+impl fmt::Display for DistinctOrderedFive {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}{}", self.higher(), self.lower())
     }
