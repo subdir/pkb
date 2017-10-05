@@ -1,37 +1,27 @@
 use std::fmt;
 
 use sequential::Sequential;
-use value::Value;
 use value::Value::*;
+use rank::distinct_ordered::DistinctOrdered;
 use rank::distinct_two::DistinctTwo;
 use rank::distinct_three::DistinctThree;
 
 
-#[derive(Debug)]
-#[derive(Clone, Copy)]
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
-pub struct DistinctFive {
-    higher_two: DistinctTwo,
-    lower_three: DistinctThree,
-}
+pub type DistinctFive = DistinctOrdered<DistinctTwo, DistinctThree>;
 
 
 impl DistinctFive {
     pub fn lowest() -> Self {
-        DistinctFive {
-            higher_two: DistinctTwo::new(Six, Five),
-            lower_three: DistinctThree::new(Four, Three, Two)
-        }
-    }
-
-    pub fn contains(&self, value: Value) -> bool {
-        self.higher_two.contains(value) || self.lower_three.contains(value)
+        Self::new(
+            DistinctTwo::new(Six, Five),
+            DistinctThree::new_three(Four, Three, Two)
+        )
     }
 
     pub fn is_straight(&self) -> bool {
-        self.higher_two.is_straight()
-        && self.lower_three.is_straight()
-        && self.higher_two.lower() == self.lower_three.higher().consequent().unwrap()
+        self.higher().is_straight()
+        && self.lower().is_straight()
+        && self.higher().lower() == self.lower().higher().consequent().unwrap()
     }
 
     pub fn skip_straight(&self) -> Option<Self> {
@@ -43,33 +33,9 @@ impl DistinctFive {
 }
 
 
-impl Sequential for DistinctFive {
-    fn consequent(&self) -> Option<Self> {
-        let next_lower_three = self.lower_three.consequent().unwrap();
-
-        if self.higher_two.lower() > next_lower_three.higher() {
-            Some(Self{
-                higher_two: self.higher_two,
-                lower_three: next_lower_three
-            })
-        } else {
-            let lower_three = DistinctThree::lowest();
-
-            match self.higher_two.consequent().and_then(|d| d.skip_le(lower_three.higher())) {
-                None => None,
-                Some(next_higher_two) => Some(Self{
-                    higher_two: next_higher_two,
-                    lower_three: lower_three
-                })
-            }
-        }
-    }
-}
-
-
 impl fmt::Display for DistinctFive {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}{}", self.higher_two, self.lower_three)
+        write!(f, "{}{}", self.higher(), self.lower())
     }
 }
 

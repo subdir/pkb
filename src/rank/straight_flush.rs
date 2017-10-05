@@ -1,7 +1,6 @@
 use std::fmt;
 
-use sequential::Sequential;
-use value::Value;
+use sequential::{Sequential, LowBound};
 use rank::straight::Straight;
 
 
@@ -14,13 +13,12 @@ pub struct StraightFlush {
 
 
 impl StraightFlush {
-    pub fn new(straight: Straight) -> Self {
-        Self { straight: straight }
-    }
+    pub fn new(straight: Straight) -> Self { Self { straight: straight } }
+}
 
-    pub fn lowest() -> Self {
-        Self { straight: Straight::lowest() }
-    }
+
+impl LowBound for StraightFlush {
+    fn lowest() -> Self { Self { straight: Straight::lowest() } }
 }
 
 

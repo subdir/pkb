@@ -1,4 +1,4 @@
-use sequential::Sequential;
+use sequential::{Sequential, LowBound};
 
 
 with_variants_array!{
@@ -66,21 +66,17 @@ impl Value {
         }
     }
 
-    pub fn lowest() -> Self { Value::Two }
-
-    pub fn skip_value(&self, value: Value) -> Option<Self> {
-        self
-        .sequence()
-        .skip_while(|v| *v == value)
-        .next()
-    }
-
     pub fn prev(&self) -> Option<Self> {
         match *self {
             Value::Two => None,
             _          => Some(Self::from_serial(self.to_serial() - 1))
         }
     }
+}
+
+
+impl LowBound for Value {
+    fn lowest() -> Self { Value::Two }
 }
 
 

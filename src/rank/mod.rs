@@ -1,6 +1,11 @@
+mod intersect;
+
+mod distinct;
+mod distinct_ordered;
 mod distinct_two;
 mod distinct_three;
 mod distinct_five;
+
 mod nothing;
 mod pair;
 mod two_pairs;
@@ -13,7 +18,7 @@ mod straight_flush;
 
 use std::fmt;
 
-use sequential::Sequential;
+use sequential::{Sequential, LowBound};
 
 use self::nothing::Nothing;
 use self::pair::Pair;
@@ -84,14 +89,14 @@ impl Rank {
 
     pub fn rank_type(&self) -> RankType {
         match *self {
-            Rank::Nothing(rank)       => RankType::Nothing,
-            Rank::Pair(rank)          => RankType::Pair,
-            Rank::TwoPairs(rank)      => RankType::TwoPairs,
-            Rank::Trips(rank)         => RankType::Trips,
-            Rank::Straight(rank)      => RankType::Straight,
-            Rank::Flush(rank)         => RankType::Flush,
-            Rank::FullHouse(rank)     => RankType::FullHouse,
-            Rank::StraightFlush(rank) => RankType::StraightFlush,
+            Rank::Nothing(_)       => RankType::Nothing,
+            Rank::Pair(_)          => RankType::Pair,
+            Rank::TwoPairs(_)      => RankType::TwoPairs,
+            Rank::Trips(_)         => RankType::Trips,
+            Rank::Straight(_)      => RankType::Straight,
+            Rank::Flush(_)         => RankType::Flush,
+            Rank::FullHouse(_)     => RankType::FullHouse,
+            Rank::StraightFlush(_) => RankType::StraightFlush,
         }
     }
 }

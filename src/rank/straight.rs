@@ -1,6 +1,6 @@
 use std::fmt;
 
-use sequential::Sequential;
+use sequential::{Sequential, LowBound};
 use value::Value;
 
 
@@ -17,10 +17,11 @@ impl Straight {
         assert!(higher >= Value::Five);
         Self { higher: higher }
     }
+}
 
-    pub fn lowest() -> Self {
-        Self { higher: Value::Five }
-    }
+
+impl LowBound for Straight {
+    fn lowest() -> Self { Self { higher: Value::Five } }
 }
 
 

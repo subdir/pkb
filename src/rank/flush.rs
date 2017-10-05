@@ -1,7 +1,6 @@
 use std::fmt;
 
-use sequential::Sequential;
-use value::Value;
+use sequential::{Sequential, LowBound};
 use rank::nothing::Nothing;
 
 
@@ -17,10 +16,11 @@ impl Flush {
     pub fn new(values: Nothing) -> Self {
         Self { values: values }
     }
+}
 
-    pub fn lowest() -> Self {
-        Self { values: Nothing::lowest() }
-    }
+
+impl LowBound for Flush {
+    fn lowest() -> Self { Self { values: Nothing::lowest() } }
 }
 
 

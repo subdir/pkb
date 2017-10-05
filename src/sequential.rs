@@ -1,3 +1,8 @@
+pub trait LowBound {
+    fn lowest() -> Self;
+}
+
+
 pub trait Sequential {
     fn consequent(&self) -> Option<Self> where Self: Sized;
     fn sequence(&self) -> Sequence<Self> where Self: Clone {

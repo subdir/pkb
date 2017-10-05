@@ -1,6 +1,6 @@
 use std::fmt;
 
-use sequential::Sequential;
+use sequential::{Sequential, LowBound};
 use rank::distinct_five::DistinctFive;
 
 
@@ -8,30 +8,30 @@ use rank::distinct_five::DistinctFive;
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Nothing {
-    cards: DistinctFive,
+    values: DistinctFive,
 }
 
 
-impl Nothing {
-    pub fn lowest() -> Self {
-        Self{ cards: DistinctFive::lowest().skip_straight().unwrap() }
+impl LowBound for Nothing {
+    fn lowest() -> Self {
+        Self{ values: DistinctFive::lowest().skip_straight().unwrap() }
     }
 }
 
 
 impl Sequential for Nothing {
     fn consequent(&self) -> Option<Self> {
-        match self.cards.consequent().and_then(|c| c.skip_straight()) {
-            None => None,
-            Some(cards) => Some(Self { cards: cards })
-        }
+        self.values
+        .consequent()
+        .and_then(|c| c.skip_straight())
+        .map(|c| Self { values: c })
     }
 }
 
 
 impl fmt::Display for Nothing {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.cards)
+        write!(f, "{}", self.values)
     }
 }
 
