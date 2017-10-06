@@ -9,7 +9,7 @@ extern crate rand;
 #[macro_use]
 mod xenum;
 mod sequential;
-mod sorted_iter;
+mod ordered_iter;
 
 pub mod suit;
 pub mod value;
