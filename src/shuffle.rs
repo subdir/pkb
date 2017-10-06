@@ -1,10 +1,6 @@
 use rand::Rng;
 
 
-pub trait Shuffled<T>: Iterator<Item=T> {
-}
-
-
 pub struct LazyShuffledVec<T> {
     vec: Vec<T>,
     taken_count: usize,
@@ -43,9 +39,6 @@ pub struct LazyShuffledIter<'a, T: Clone + 'a, R: Rng + 'a> {
     vec: &'a mut LazyShuffledVec<T>,
     rng: R
 }
-
-
-impl<'a, T: Clone, R: Rng> Shuffled<T> for LazyShuffledIter<'a, T, R> {}
 
 
 impl<'a, T: Clone + 'a, R: Rng> Iterator for LazyShuffledIter<'a, T, R> {

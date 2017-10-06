@@ -15,8 +15,15 @@ impl Deck {
         Self { vec: LazyShuffledVec::new(Card::gen_deck().collect()) }
     }
 
-    pub fn shuffled_iter<R: Rng>(&mut self, rng: R) -> LazyShuffledIter<Card, R> {
+    pub fn shuffled<R: Rng>(&mut self, rng: R) -> LazyShuffledIter<Card, R> {
         self.vec.shuffled_iter(rng)
     }
 }
+
+
+pub trait ShuffledDeck: Iterator<Item=Card> {
+}
+
+
+impl<'a, R: Rng> ShuffledDeck for LazyShuffledIter<'a, Card, R> {}
 
