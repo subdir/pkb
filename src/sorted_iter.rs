@@ -24,10 +24,7 @@ pub trait SortedIterator {
 }
 
 
-impl<T> SortedIterator for T
-where
-    T: Iterator
-{}
+impl<T> SortedIterator for T where T: Iterator {}
 
 
 pub struct EnsureStrictAsc<I> where I: Iterator, I::Item: Ord {
