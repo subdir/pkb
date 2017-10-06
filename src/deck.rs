@@ -21,8 +21,7 @@ impl Deck {
 }
 
 
-pub trait ShuffledDeck: Iterator<Item=Card> {
-}
+pub trait ShuffledDeck: Iterator<Item=Card> {}
 
 
 impl<'a, R: Rng> ShuffledDeck for LazyShuffledIter<'a, Card, R> {}
