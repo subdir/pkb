@@ -4,4 +4,6 @@ version = "0.1.0"
 authors = ["subdir"]
 
 [dependencies]
+rand = "0.3"
 derive_more = "0.6.0"
+itertools = "0.6.3"

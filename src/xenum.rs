@@ -26,8 +26,8 @@ macro_rules! with_variants_array {
         }
 
         impl $name {
-            const VARIANTS_NUM: usize = arity!($($variant),*);
-            const VARIANTS: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
+            pub const VARIANTS_NUM: usize = arity!($($variant),*);
+            pub const VARIANTS: [$name; arity!($($variant),*)] = [ $( $name::$variant, )* ];
         }
     };
 }
