@@ -43,34 +43,3 @@ impl std::fmt::Display for Suit {
     }
 }
 
-/*
-pub struct SuitStats {
-    stats: [u8; 4 /* Suit::VARIANTS_NUM */],
-}
-
-
-impl SuitStats {
-    pub fn iter(self) -> Box<Iterator<Item=(Suit, u8)>> { Box::new(
-        self.stats.iter()
-        .enumerate()
-        .filter_map(|(id, &count)| {
-            if count > 0 {
-                Some((Suit::from_serial(id), count))
-            } else {
-                None
-            }
-        })
-    )}
-}
-
-
-impl FromIterator<Suit> for SuitStats {
-    fn from_iter<I>(suits: I) -> Self where I: IntoIterator<Item=Suit> {
-        let mut stats = [0u8; Suit::VARIANTS_NUM];
-        for suit in suits {
-            stats[suit.to_serial()] += 1;
-        }
-        SuitStats { stats: stats }
-    }
-}
-*/
