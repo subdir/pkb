@@ -99,7 +99,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "assertion failed: assertion(&next, &peek)")]
     fn test_asc_fail() {
         vec!(1u8,2,2).into_iter().ensure_strict_asc().collect::<Vec<u8>>();
     }
@@ -113,7 +113,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "assertion failed: assertion(&next, &peek)")]
     fn test_desc_fail() {
         vec!(3u8,2,2).into_iter().ensure_strict_desc().collect::<Vec<u8>>();
     }
