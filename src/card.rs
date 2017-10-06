@@ -19,10 +19,7 @@ impl Card {
     }
 
     pub fn gen_deck() -> impl Iterator<Item=Card> {
-        (0 .. Self::deck_size()).map(|x| Card::new(
-            Value::from_serial(x / Suit::VARIANTS_NUM),
-            Suit::from_serial(x % Suit::VARIANTS_NUM)
-        ))
+        (0 .. Self::deck_size()).map(|x| Card::from_serial(x))
         /*
         Bug: https://github.com/rust-lang/rust/issues/38615
 
@@ -44,6 +41,14 @@ impl Card {
         Card::new(
             Value::from_char(chars.next().unwrap()),
             Suit::from_char(chars.next().unwrap()),
+        )
+    }
+
+    fn from_serial(num: usize) -> Self {
+        assert!(num < Self::deck_size());
+        Card::new(
+            Value::from_serial(num / Suit::VARIANTS_NUM),
+            Suit::from_serial(num % Suit::VARIANTS_NUM)
         )
     }
 
