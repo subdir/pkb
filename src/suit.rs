@@ -2,6 +2,7 @@ with_variants_array! {
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Hash)]
+#[derive(Ord, PartialOrd)]
 pub enum Suit {
     Spades,
     Hearts,

@@ -19,6 +19,7 @@ pub mod card;
 pub mod deck;
 pub mod shuffle;
 pub mod rank;
+pub mod ranking;
 
 pub mod game;
 

@@ -8,6 +8,7 @@ use Suit;
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Hash)]
+#[derive(Ord, PartialOrd)]
 pub struct Card {
     // Cards are ordered first by value then by suit
     value: Value,
