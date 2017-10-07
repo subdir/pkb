@@ -4,10 +4,12 @@ use std::fmt;
 use Value;
 use Suit;
 
+
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Hash)]
 pub struct Card {
+    // Cards are ordered first by value then by suit
     value: Value,
     suit: Suit,
 }

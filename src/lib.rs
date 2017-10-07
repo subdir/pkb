@@ -7,23 +7,23 @@ extern crate itertools;
 extern crate rand;
 
 #[macro_use]
-mod xenum;
-mod sequential;
-mod ordered_iter;
+pub mod util;
+pub use util::ordered_iter;
+pub use util::sequential;
+pub use util::xenum;
 
-pub mod suit;
+pub mod chips;
 pub mod value;
+pub mod suit;
 pub mod card;
 pub mod deck;
 pub mod shuffle;
+pub mod rank;
 
 pub mod game;
 
-pub mod chips;
-pub mod rank;
-
-pub use suit::Suit;
 pub use value::Value;
+pub use suit::Suit;
 pub use card::Card;
 pub use rank::Rank;
 

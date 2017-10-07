@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(PartialEq, PartialOrd, Eq, Ord)]
