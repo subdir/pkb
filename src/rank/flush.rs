@@ -1,26 +1,26 @@
 use std::fmt;
 
 use sequential::{Sequential, LowBound};
-use rank::nothing::Nothing;
+use rank::highcard::HighCard;
 
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Flush {
-    values: Nothing,
+    values: HighCard,
 }
 
 
 impl Flush {
-    pub fn new(values: Nothing) -> Self {
+    pub fn new(values: HighCard) -> Self {
         Self { values: values }
     }
 }
 
 
 impl LowBound for Flush {
-    fn lowest() -> Self { Self { values: Nothing::lowest() } }
+    fn lowest() -> Self { Self { values: HighCard::lowest() } }
 }
 
 

@@ -14,7 +14,7 @@ mod distinct_ordered_two;
 mod distinct_ordered_three;
 mod distinct_ordered_five;
 
-mod nothing;
+mod highcard;
 mod pair;
 mod two_pairs;
 mod trips;
@@ -29,7 +29,7 @@ use std::fmt;
 
 use sequential::{Sequential, LowBound};
 
-pub use self::nothing::Nothing;
+pub use self::highcard::HighCard;
 pub use self::pair::Pair;
 pub use self::two_pairs::TwoPairs;
 pub use self::trips::Trips;
@@ -42,7 +42,7 @@ pub use self::straight_flush::StraightFlush;
 
 #[derive(Debug)]
 pub enum RankType {
-    Nothing,
+    HighCard,
     Pair,
     TwoPairs,
     Trips,
@@ -58,7 +58,7 @@ pub enum RankType {
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub enum Rank {
-    Nothing(Nothing),
+    HighCard(HighCard),
     Pair(Pair),
     TwoPairs(TwoPairs),
     Trips(Trips),
@@ -71,7 +71,7 @@ pub enum Rank {
 
 
 impl Rank {
-    pub fn nothing(nothing: Nothing) -> Self { Rank::Nothing(nothing) }
+    pub fn highcard(highcard: HighCard) -> Self { Rank::HighCard(highcard) }
     pub fn pair(pair: Pair) -> Self { Rank::Pair(pair) }
     pub fn two_pairs(two_pairs: TwoPairs) -> Self { Rank::TwoPairs(two_pairs) }
     pub fn trips(trips: Trips) -> Self { Rank::Trips(trips) }
@@ -82,7 +82,7 @@ impl Rank {
     pub fn straight_flush(straight_flush: StraightFlush) -> Self { Rank::StraightFlush(straight_flush) }
 
     pub fn sequence() -> impl Iterator<Item=Rank> {
-        Nothing::lowest().sequence().map(|r| Rank::nothing(r))
+        HighCard::lowest().sequence().map(|r| Rank::highcard(r))
         .chain(Pair::lowest().sequence().map(|r| Rank::pair(r)))
         .chain(TwoPairs::lowest().sequence().map(|r| Rank::two_pairs(r)))
         .chain(Trips::lowest().sequence().map(|r| Rank::trips(r)))
@@ -95,7 +95,7 @@ impl Rank {
 
     pub fn rank_type(&self) -> RankType {
         match *self {
-            Rank::Nothing(_)       => RankType::Nothing,
+            Rank::HighCard(_)       => RankType::HighCard,
             Rank::Pair(_)          => RankType::Pair,
             Rank::TwoPairs(_)      => RankType::TwoPairs,
             Rank::Trips(_)         => RankType::Trips,
@@ -112,7 +112,7 @@ impl Rank {
 impl fmt::Display for Rank {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Rank::Nothing(rank)       => rank.fmt(f),
+            Rank::HighCard(rank)       => rank.fmt(f),
             Rank::Pair(rank)          => rank.fmt(f),
             Rank::TwoPairs(rank)      => rank.fmt(f),
             Rank::Trips(rank)         => rank.fmt(f),
