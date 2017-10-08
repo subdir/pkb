@@ -82,39 +82,6 @@ impl<T: Countable, B: Bits + Clone> TinySet<T, B> {
 }
 
 
-/*
-struct TinyBitSetIter<T: Bits> {
-    bits: T
-}
-
-
-#[derive(Clone, Copy)]
-#[derive(Eq, PartialEq, Hash)]
-struct TinyBitSet {
-    bits: u64
-}
-
-
-impl<T: Countable> TinySet {
-    fn new() -> Self { Self { bits: 0 } }
-
-    fn add(&self, val: &T) {
-        let serial = val.to_serial();
-        assert!(serial < u64::bits());
-        self.bits &= 1 << val.to_serial();
-    }
-
-    fn contains(&self, val: &T) -> bool {
-        (self.bits & (1 << val.to_serial())) != 0
-    }
-
-//    fn iter(&self) -> TinyBitSetIter<T> {
-  //  }
-}
-
-*/
-
-
 #[cfg(test)]
 mod test {
     use super::*;
