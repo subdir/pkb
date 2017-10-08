@@ -35,15 +35,35 @@ macro_rules! with_variants_array {
 
 macro_rules! inverted_match_constructor {
     (
-        pub fn $inverted:ident ($res: ty) -> Self {}
-        pub fn $funcname:ident ($arg: ident) -> $res2:ty {
-            match $var:ident {
+        fn $inverted:ident ($res: ty) -> Self {}
+        fn $funcname:ident (&$arg: ident) -> $res2:ty {
+            match *$var:ident {
                 $( $variant:path => $map:expr ),*
             }
         }
     ) => {
-        pub fn $funcname ($arg) -> $res {
-            match $var {
+        fn $funcname (&$arg) -> $res {
+            match *$var {
+                $( $variant => $map, )*
+            }
+        }
+        fn $inverted(from: $res) -> Self {
+            match from {
+                $( $map => $variant, )*
+                _ => panic!("No variant for {:?}", from)
+            }
+        }
+    };
+    (
+        pub fn $inverted:ident ($res: ty) -> Self {}
+        pub fn $funcname:ident (&$arg: ident) -> $res2:ty {
+            match *$var:ident {
+                $( $variant:path => $map:expr ),*
+            }
+        }
+    ) => {
+        pub fn $funcname (&$arg) -> $res {
+            match *$var {
                 $( $variant => $map, )*
             }
         }
@@ -53,6 +73,6 @@ macro_rules! inverted_match_constructor {
                 _ => panic!("No variant for {:?}", from)
             }
         }
-    }
+    };
 }
 

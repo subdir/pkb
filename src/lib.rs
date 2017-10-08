@@ -10,6 +10,7 @@ extern crate rand;
 pub mod util;
 pub use util::ordered_iter;
 pub use util::sequential;
+pub use util::countable;
 pub use util::xenum;
 
 pub mod chips;

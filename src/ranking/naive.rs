@@ -4,6 +4,7 @@ use Rank;
 use rank::Straight;
 use ordered_iter::{OrderedIterator, StrictDescending};
 use sequential::Sequential;
+use countable::Countable;
 
 
 fn find_best_straight<I>(mut iter: I) -> Option<(Rank, Vec<Card>)>

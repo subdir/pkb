@@ -3,6 +3,7 @@ use std::fmt;
 
 use Value;
 use Suit;
+use countable::Countable;
 
 
 #[derive(Debug)]
