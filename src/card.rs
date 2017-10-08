@@ -48,6 +48,16 @@ impl Card {
         )
     }
 
+    pub fn value(self) -> Value { self.value }
+    pub fn suit(self) -> Suit { self.suit }
+
+    pub fn to_string(self) -> String {
+        format!("{}{}", self.value().to_char(), self.suit().to_char())
+    }
+}
+
+
+impl Countable for Card {
     fn from_serial(num: usize) -> Self {
         assert!(num < Self::deck_size());
         Card::new(
@@ -56,11 +66,8 @@ impl Card {
         )
     }
 
-    pub fn value(self) -> Value { self.value }
-    pub fn suit(self) -> Suit { self.suit }
-
-    pub fn to_string(self) -> String {
-        format!("{}{}", self.value().to_char(), self.suit().to_char())
+    fn to_serial(&self) -> usize {
+       self.value.to_serial() * Suit::VARIANTS_NUM + self.suit.to_serial() 
     }
 }
 
