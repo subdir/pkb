@@ -3,30 +3,30 @@ use countable::Countable;
 
 #[derive(Clone, Copy)]
 #[derive(Eq, PartialEq, Hash)]
-struct BittySet<T: Countable, B: Bits + Clone> {
+pub struct BittySet<T: Countable, B: Bits + Clone> {
     bits: B,
     type_holder: Option<T>
 }
 
 
 impl<T: Countable, B: Bits + Clone> BittySet<T, B> {
-    fn new() -> Self { Self { bits: B::zero(), type_holder: None } }
+    pub fn new() -> Self { Self { bits: B::zero(), type_holder: None } }
 
-    fn add(&mut self, val: &T) {
+    pub fn add(&mut self, val: &T) {
         self.bits.set(val.to_serial())
     }
 
-    fn contains(&mut self, val: &T) -> bool {
+    pub fn contains(&mut self, val: &T) -> bool {
         self.bits.get(val.to_serial())
     }
 
-    fn desc_iter(&self) -> impl Iterator<Item=T> {
+    pub fn desc_iter(&self) -> impl Iterator<Item=T> {
         self.bits.clone().set_bits_desc_iter().map(|b| T::from_serial(b))
     }
 }
 
 
-trait Bits: Sized {
+pub trait Bits: Sized {
     fn zero() -> Self;
     fn size() -> usize;
     fn get(&mut self, bit: usize) -> bool;
