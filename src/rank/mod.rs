@@ -95,7 +95,7 @@ impl Rank {
 
     pub fn rank_type(&self) -> RankType {
         match *self {
-            Rank::HighCard(_)       => RankType::HighCard,
+            Rank::HighCard(_)      => RankType::HighCard,
             Rank::Pair(_)          => RankType::Pair,
             Rank::TwoPairs(_)      => RankType::TwoPairs,
             Rank::Trips(_)         => RankType::Trips,
@@ -112,7 +112,7 @@ impl Rank {
 impl fmt::Display for Rank {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Rank::HighCard(rank)       => rank.fmt(f),
+            Rank::HighCard(rank)      => rank.fmt(f),
             Rank::Pair(rank)          => rank.fmt(f),
             Rank::TwoPairs(rank)      => rank.fmt(f),
             Rank::Trips(rank)         => rank.fmt(f),
@@ -123,5 +123,19 @@ impl fmt::Display for Rank {
             Rank::StraightFlush(rank) => rank.fmt(f),
         }
     }
+}
+
+
+fn permutations_count(k: usize, n: usize) -> usize {
+    let mut res = 1;
+    for i in 0..k {
+        res *= n - i;
+    }
+    res
+}
+
+
+fn combinations_count(k: usize, n: usize) -> usize {
+    permutations_count(k, n) / permutations_count(k, k)
 }
 

@@ -5,6 +5,7 @@ use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
 use rank::distinct_ordered_two::DistinctOrderedTwo;
+use rank::combinations_count;
 
 
 #[derive(Debug)]
@@ -29,6 +30,10 @@ impl Trips {
 
     pub fn trips_value(&self) -> Value { self.trips.primary() }
     pub fn kickers(&self) -> DistinctOrderedTwo { self.trips.secondary() }
+
+    pub fn ranks_count() -> usize {
+        Value::VARIANTS_NUM * combinations_count(2, Value::VARIANTS_NUM - 1)
+    }
 }
 
 
@@ -50,3 +55,13 @@ impl fmt::Display for Trips {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(Trips::ranks_count(), Trips::lowest().sequence().count());
+    }
+}

@@ -3,6 +3,7 @@ use std::fmt;
 use sequential::{Sequential, LowBound};
 use value::Value;
 use rank::distinct::Distinct;
+use rank::permutations_count;
 
 
 #[derive(Debug)]
@@ -20,6 +21,10 @@ impl Quads {
 
     pub fn quads_value(&self) -> Value { self.quads.primary() }
     pub fn kicker(&self) -> Value { self.quads.secondary() }
+
+    pub fn ranks_count() -> usize {
+        permutations_count(2, Value::VARIANTS_NUM)
+    }
 }
 
 
@@ -48,3 +53,13 @@ impl fmt::Display for Quads {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(Quads::ranks_count(), Quads::lowest().sequence().count());
+    }
+}

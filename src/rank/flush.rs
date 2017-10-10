@@ -16,6 +16,7 @@ impl Flush {
     pub fn new(values: HighCard) -> Self {
         Self { values: values }
     }
+    pub fn ranks_count() -> usize { HighCard::ranks_count() }
 }
 
 

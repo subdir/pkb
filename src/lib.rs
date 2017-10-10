@@ -12,15 +12,17 @@ pub use util::ordered_iter;
 pub use util::sequential;
 pub use util::countable;
 pub use util::xenum;
+pub use util::bitty_set;
 
 pub mod chips;
 pub mod value;
 pub mod suit;
 pub mod card;
+//pub mod cardset;
 pub mod deck;
 pub mod shuffle;
 pub mod rank;
-pub mod ranking;
+//pub mod ranking;
 
 pub mod game;
 
@@ -28,4 +30,3 @@ pub use value::Value;
 pub use suit::Suit;
 pub use card::Card;
 pub use rank::Rank;
-

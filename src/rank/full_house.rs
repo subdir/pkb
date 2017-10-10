@@ -3,6 +3,7 @@ use std::fmt;
 use sequential::{Sequential, LowBound};
 use value::Value;
 use rank::distinct::Distinct;
+use rank::permutations_count;
 
 
 #[derive(Debug)]
@@ -20,6 +21,10 @@ impl FullHouse {
 
     pub fn three_card_value(&self) -> Value { self.house.primary() }
     pub fn two_card_value(&self) -> Value { self.house.secondary() }
+
+    pub fn ranks_count() -> usize {
+        permutations_count(2, Value::VARIANTS_NUM)
+    }
 }
 
 
@@ -48,3 +53,13 @@ impl fmt::Display for FullHouse {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(FullHouse::ranks_count(), FullHouse::lowest().sequence().count());
+    }
+}

@@ -14,6 +14,10 @@ pub struct StraightFlush {
 
 impl StraightFlush {
     pub fn new(straight: Straight) -> Self { Self { straight: straight } }
+
+    pub fn ranks_count() -> usize {
+        Straight::ranks_count()
+    }
 }
 
 
@@ -35,3 +39,13 @@ impl fmt::Display for StraightFlush {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(StraightFlush::ranks_count(), StraightFlush::lowest().sequence().count());
+    }
+}

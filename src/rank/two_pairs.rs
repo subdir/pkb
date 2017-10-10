@@ -5,6 +5,7 @@ use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
 use rank::distinct_ordered_two::DistinctOrderedTwo;
+use rank::combinations_count;
 
 
 #[derive(Debug)]
@@ -30,6 +31,10 @@ impl TwoPairs {
     fn higher_pair_value(&self) -> Value { self.pairs.primary().higher() }
     fn lower_pair_value(&self) -> Value { self.pairs.primary().lower() }
     fn kicker(&self) -> Value { self.pairs.secondary() }
+
+    pub fn ranks_count() -> usize {
+        combinations_count(2, Value::VARIANTS_NUM) * (Value::VARIANTS_NUM - 2)
+    }
 }
 
 
@@ -58,3 +63,13 @@ impl fmt::Display for TwoPairs {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(TwoPairs::ranks_count(), TwoPairs::lowest().sequence().count());
+    }
+}

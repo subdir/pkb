@@ -1,6 +1,7 @@
 use std::fmt;
 
 use sequential::Sequential;
+use value::Value;
 use value::Value::*;
 use rank::distinct_ordered::DistinctOrdered;
 use rank::distinct_ordered_two::DistinctOrderedTwo;
@@ -11,11 +12,15 @@ pub type DistinctOrderedFive = DistinctOrdered<DistinctOrderedTwo, DistinctOrder
 
 
 impl DistinctOrderedFive {
-    pub fn lowest() -> Self {
+    pub fn from_values(highest: Value, high: Value, middle: Value, low: Value, lowest: Value) -> Self {
         Self::new(
-            DistinctOrderedTwo::new(Six, Five),
-            DistinctOrderedThree::new_three(Four, Three, Two)
+            DistinctOrderedTwo::new(highest, high),
+            DistinctOrderedThree::new_three(middle, low, lowest)
         )
+    }
+
+    pub fn lowest() -> Self {
+        Self::from_values(Six, Five, Four, Three, Two)
     }
 
     pub fn is_straight(&self) -> bool {

@@ -1,3 +1,4 @@
+use std::fmt;
 use countable::Countable;
 
 
@@ -16,6 +17,10 @@ impl<T: Countable, B: Bits + Clone> BittySet<T, B> {
         self.bits.set(val.to_serial())
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.bits == B::zero()
+    }
+
     pub fn contains(&mut self, val: &T) -> bool {
         self.bits.get(val.to_serial())
     }
@@ -26,7 +31,14 @@ impl<T: Countable, B: Bits + Clone> BittySet<T, B> {
 }
 
 
-pub trait Bits: Sized {
+impl<T: Countable + fmt::Debug, B: Bits + Clone> fmt::Debug for BittySet<T, B> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(f, "BittySet{{ {:?} }}", self.desc_iter().collect::<Vec<T>>())
+    }
+}
+
+
+pub trait Bits: Sized + PartialEq {
     fn zero() -> Self;
     fn size() -> usize;
     fn get(&mut self, bit: usize) -> bool;
@@ -69,7 +81,7 @@ impl Bits for u64 {
 }
 
 
-struct SetBitsDescIter<B: Bits> {
+pub struct SetBitsDescIter<B: Bits> {
     bits: B,
     index: usize
 }

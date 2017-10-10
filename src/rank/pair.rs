@@ -5,6 +5,7 @@ use value::Value;
 use rank::intersect::Intersect;
 use rank::distinct::Distinct;
 use rank::distinct_ordered_three::DistinctOrderedThree;
+use rank::combinations_count;
 
 
 #[derive(Debug)]
@@ -29,6 +30,10 @@ impl Pair {
 
     pub fn pair_value(&self) -> Value { self.pair.primary() }
     pub fn kickers(&self) -> DistinctOrderedThree { self.pair.secondary() }
+
+    pub fn ranks_count() -> usize {
+        Value::VARIANTS_NUM * combinations_count(3, Value::VARIANTS_NUM - 1)
+    }
 }
 
 
@@ -50,3 +55,13 @@ impl fmt::Display for Pair {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(Pair::ranks_count(), Pair::lowest().sequence().count());
+    }
+}

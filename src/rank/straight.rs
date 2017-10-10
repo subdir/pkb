@@ -17,6 +17,8 @@ impl Straight {
         assert!(higher >= Value::Five);
         Self { higher: higher }
     }
+
+    pub fn ranks_count() -> usize { 10 }
 }
 
 
@@ -45,3 +47,13 @@ impl fmt::Display for Straight {
     }
 }
 
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ranks_count() {
+        assert_eq!(Straight::ranks_count(), Straight::lowest().sequence().count());
+    }
+}
